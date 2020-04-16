@@ -6,12 +6,16 @@ connection = pika.BlockingConnection(
     pika.ConnectionParameters(host='localhost'))
 channel = connection.channel()
 
+
+
 channel.exchange_declare(exchange='requests', exchange_type='fanout')
 
 result = channel.queue_declare(queue='', exclusive=True)
 queue_name = result.method.queue
 
 channel.queue_bind(exchange='requests', queue=queue_name)
+
+print('Init service successfully!')
 
 def handle_message(ch, method, properties, body) : 
     message = body.decode('utf-8')
